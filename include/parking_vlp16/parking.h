@@ -44,6 +44,8 @@ private:
 	bool obs_exist_flag_;
 	bool check_flag_;
 
+	vector<geometry_msgs::Point> obstacles_;
+
 public:
 	void initSetup();
 	void pointCallback(const sensor_msgs::PointCloud2ConstPtr &obstacle);
