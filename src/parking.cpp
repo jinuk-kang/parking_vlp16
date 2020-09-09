@@ -2,7 +2,7 @@
 
 void ParkingLidar::initSetup() {
 	// ros
-	obs_sub_ = nh_.subscribe("/raw_obstacles", 1, &ParkingLidar::planningCallback, this );
+	obs_sub_ = nh_.subscribe("/velodyne_points", 1, &ParkingLidar::pointCallback, this );
 	gps_sub_ = nh_.subscribe("/parking_info", 1, &ParkingLidar::parkingInfoCallback, this );
 	gps_pub_ = nh_.advertise<std_msgs::Bool>("/parking_area", 10);
 
@@ -13,9 +13,11 @@ void ParkingLidar::initSetup() {
 	gps_theta_ = 0;
 	angle_ = 0;
 	ex_angle_ = 0;
+
 	// flags
 	obs_exist_flag_ = false;
 	check_flag_ = false;
+
 }
 
 // 0: false 1: true
@@ -28,7 +30,14 @@ void ParkingLidar::parkingInfoCallback(const geometry_msgs::Pose2DConstPtr &info
 }
 
 void ParkingLidar::pointCallback(const sensor_msgs::PointCloud2ConstPtr &input) {
-	if(obs.segments.size() > 0) {
+
+	obstacles_ = Cluster().cluster(input, 0.5, 10, -6 ,0);
+
+	if(obstacles_.size() >= 3){
+
+	}
+
+/*	if(obs.segments.size() > 0) {
 		centerPoint_.x = (obs.segments[0].first_point.x + obs.segments[0].last_point.x) / 2;
 		centerPoint_.y = (obs.segments[0].first_point.y + obs.segments[0].last_point.y) / 2;
 		//centerPoint_.x = obs.segments[0].first_point.x;
@@ -47,6 +56,7 @@ void ParkingLidar::pointCallback(const sensor_msgs::PointCloud2ConstPtr &input) 
 			check_flag_ = false;
 		}
 	}
+	*/
 }
 
 void ParkingLidar::checkObstacle() {

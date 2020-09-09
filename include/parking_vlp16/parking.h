@@ -8,9 +8,14 @@
 #include "std_msgs/Bool.h"
 #include "geometry_msgs/Pose2D.h"
 
+#include "sensor_msgs/PointCloud2.h"
+#include "pcl_conversions/pcl_conversions.h"
+#include "clustering.cpp"
+
 #define GAP 1.3
 #define DIFF_ANGLE 0
 #define _USE_MATH_DEFINES
+
 using namespace std;
 
 class ParkingLidar {
