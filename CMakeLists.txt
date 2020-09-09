@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(parking)
+project(parking_vlp16)
 
 add_compile_options(-std=c++11)
 
@@ -11,6 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   ackermann_msgs
   sensor_msgs
+  pcl_ros
+  pcl_conversions
 )
 
 # add_message_files(

@@ -10,7 +10,7 @@
 
 #include "sensor_msgs/PointCloud2.h"
 #include "pcl_conversions/pcl_conversions.h"
-#include "clustering.cpp"
+#include "parking_vlp16/clustering.cpp"
 
 #define GAP 1.3
 #define DIFF_ANGLE 0
