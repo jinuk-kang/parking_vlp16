@@ -25,6 +25,7 @@ private:
 	ros::Subscriber obs_sub_;
 	ros::Subscriber gps_sub_;
 	ros::Publisher gps_pub_;
+	ros::Publisher marker_pub_;
 
 	// msgs
 	geometry_msgs::Point nearestPoint_;
@@ -54,6 +55,7 @@ public:
 	void run();
 	void printCurrentState();
 	void checkObstacle();
+	void visualize(vector<geometry_msgs::Point> input_points);
 
 	double calcAngle(geometry_msgs::Point p){ return -atan(p.y/p.x)/M_PI*180; } 
 	double getDist(geometry_msgs::Point p) {return sqrt(p.x*p.x + p.y*p.y); }	

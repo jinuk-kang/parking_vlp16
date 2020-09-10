@@ -5,6 +5,7 @@ void ParkingLidar::initSetup() {
 	obs_sub_ = nh_.subscribe("/velodyne_points", 1, &ParkingLidar::pointCallback, this );
 	gps_sub_ = nh_.subscribe("/parking_info", 1, &ParkingLidar::parkingInfoCallback, this );
 	gps_pub_ = nh_.advertise<std_msgs::Bool>("/parking_area", 10);
+	marker_pub_ = nh_.advertise<visualization_msgs::Marker>("/parking_points", 10);
 
 	// values
 	count_ = 0;
@@ -32,10 +33,8 @@ void ParkingLidar::parkingInfoCallback(const geometry_msgs::Pose2DConstPtr &info
 void ParkingLidar::pointCallback(const sensor_msgs::PointCloud2ConstPtr &input) {
 
 	obstacles_ = Cluster().cluster(input, 0.5, 10, -6 ,0);
+	visualize(obstacles_);
 
-	if(obstacles_.size() >= 3){
-
-	}
 
 /*	if(obs.segments.size() > 0) {
 		centerPoint_.x = (obs.segments[0].first_point.x + obs.segments[0].last_point.x) / 2;
@@ -135,6 +134,36 @@ void ParkingLidar::run(){
 		}	
 	}
 }
+
+void ParkingLidar::visualize(vector<geometry_msgs::Point> input_points){
+
+	visualization_msgs::Marker points;
+
+	points.header.frame_id = "velodyne";
+	points.header.stamp = ros::Time::now();
+	points.ns = "points_and_lines";
+	points.action = visualization_msgs::Marker::ADD;
+	points.pose.orientation.w = 1.0;
+	points.id = 1;
+	points.type = visualization_msgs::Marker::POINTS;
+	points.scale.x = 0.3;
+	points.scale.y = 0.3;
+	points.color.a = 1.0;
+	points.color.g = 1.0f;
+
+	geometry_msgs::Point p;
+
+	for (auto point : input_points) {
+		p.x = point.x;
+		p.y = point.y;
+		p.z = point.z;
+		points.points.push_back(p);
+	}
+
+	marker_pub_.publish(points);
+
+}
+
 
 int main(int argc, char** argv) {
 

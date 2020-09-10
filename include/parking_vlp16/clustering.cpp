@@ -155,6 +155,26 @@ vector<geometry_msgs::Point> Cluster::cluster(const sensor_msgs::PointCloud2Cons
         mean_point.points.push_back(p_);
 		mean_p.push_back(p_);
     }
+	
+    if (cluster_cloud3.size() != 0){
+        for (size_t i=0; i<cluster_cloud3.size(); i++){
+           // cout << cluster_cloud2[i].x << endl;
+            sum_x += cluster_cloud3[i].x;
+            sum_y += cluster_cloud3[i].y;
+            sum_z += cluster_cloud3[i].z;
+        
+        }
+    
+        geometry_msgs::Point p_;
+
+        p_.x = sum_x / cluster_cloud3.size();
+        p_.y = sum_y / cluster_cloud3.size();
+        p_.z = sum_z / cluster_cloud3.size();
+
+        mean_point.points.push_back(p_);
+		mean_p.push_back(p_);
+		sum_x = 0; sum_y = 0; sum_z = 0;
+    }
 
     //point_pub_.publish(mean_point);
 
@@ -184,14 +204,17 @@ vector<geometry_msgs::Point> Cluster::cluster(const sensor_msgs::PointCloud2Cons
 vector<geometry_msgs::Point> Cluster::filter(vector<geometry_msgs::Point> points) { 
 	points = sort(points);
 
-	if(points.size() > 2) {
+/*  if(points.size() > 2) {
 		vector<geometry_msgs::Point> new_points;
 		new_points.push_back(points.at(0));
 		new_points.push_back(points.at(1));
 		return new_points;
 	} else {
 		return points;
-	}
+	}*/
+
+	return points;
+
 }
 
 vector<geometry_msgs::Point> Cluster::sort(vector<geometry_msgs::Point> list) {
